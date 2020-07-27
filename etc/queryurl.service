@@ -1,0 +1,16 @@
+[Unit]
+Description = queryURL service ( gunicorn - fastapi )
+After = network-online.target
+ConditionPathExists = /usr/local/queryurl
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory = /usr/local/queryurl
+ExecStart = /usr/local/bin/pipenv run gunicorn --config /usr/local/queryurl/etc/gunicorn.conf app:api
+ExecReload = /bin/kill -s HUP $MAINPID
+ExecStop = /bin/kill -s TERM $MAINPID
+PrivateTmp = true
+
+[Install]
+WantedBy = multi-user.target
